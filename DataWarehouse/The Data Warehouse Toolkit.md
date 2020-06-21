@@ -2,15 +2,34 @@
 
 ---
 
-## Table of contents
-1. [Chapter 1 DW/BI & Dimentional Modeling](#chapter1)
+## Contents
+1. [**Chapter 1: DW/BI & Dimentional Modeling**](#chapter1)
 	1. [Goal of DW/BI](#goal)
 	2. [DW/BI manager's responsibilities](#responsibility)
 	3. [Dimentional Modeling Introduction](#dimension-intro)
 	4. [Star Scheams vs. OLAP](#compare)
 	5. [Kimball's DW/BI Architecture](#kimball)
 	6. [Alternative DW/BI Architectures](#alternative)
-2. [Charpter 2]
+2. Chapter 2: Kimball Dimensional Modeling Techniques Overview
+3. Chapter 3: Retail Sales
+4. Chapter 4: Inventory
+5. Chapter 5: Procurement
+6. Chapter 6: Order Management
+7. Chapter 7: Accounting
+8. Chapter 8: Customer Relationship Management
+9. Chapter 9: Human Resources Management
+10. Chapter 10: Financial Service
+11. Chapter 11: Telecommunication
+12. Chapter 12: Transportation
+13. Chapter 13: Education
+14. Chapter 14: Healthcare
+15. Chapter 15: Electronic Commerce
+16. Chapter 16: Insurance
+17. [**Chapter 17: Kimball Lifecycle Overview**](#lifecycle)
+18. Chapter 18: Dimensional Modeling Process and Tasks
+19. Chapter 19: ETL Subsystems and Techniques
+20. Chapter 20: ETL System Design and development Process and Task
+21. Chapter 21: Big Data Analytics
 
 ---
 
@@ -117,3 +136,5 @@ GROUP BY
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-6.png">
 
 ---
+
+## Chapter 17: Kimball Lifecycle Overview <a name="lifecycle"></a>
