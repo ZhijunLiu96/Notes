@@ -49,8 +49,7 @@
 - Dimention table: "who, what, where, whhen, how, why" (usually no more than 50 attributes)
 - Fact table: measurements
 - Dimensions provide the entry points to the data, and the final labels and groupings on all DW/BI analysis
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-1.png">
-
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-1.png">
 
 ```sql
 SELECT
@@ -77,10 +76,10 @@ GROUP BY
 - Data is stored and indexed using format and techniques that are designed for dimensional data
 - Create performance aggregations or precalculated summary tables
 - Cubes deliver suoerior query performance (b/c precalculations, indexing strategies)
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-2.png">
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-2.png">
 
 ### Kimball's DW/BI Architecture <a name="kimball"></a>
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-3.png">
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-3.png">
 
 **ETL**
 - Understand the source data
@@ -102,7 +101,7 @@ GROUP BY
 ### Alternative DW/BI Architectures <a name="alternative"></a>
 
 **Independent Data Mart Architecture**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-4.png">
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-4.png">
 - A database satisfies department's analytic requirements
 - Other department don't have access
 - Prevalent in large organizations
@@ -110,11 +109,11 @@ GROUP BY
 > (Difference) Dimensional Modeling: atomic details, built by business process
 
 **Hub-and-Spoke Corporate Information Factory Inmon Architecture (CIF)**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-5.png">
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-5.png">
 - Normalized EDW (Enterprise Data Warehouse)
 - Advocate enterprise data coordination and integration
 
 **Hybrid Hub-and-Spoke and Kimball Architecture**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehose/figure/1-6.png">
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-6.png">
 
 ---
