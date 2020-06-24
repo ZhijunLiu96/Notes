@@ -25,19 +25,26 @@
 14. Chapter 14: Healthcare
 15. Chapter 15: Electronic Commerce
 16. Chapter 16: Insurance
-17. [**Chapter 17: Kimball Lifecycle Overview**](#lifecycle)
+17. [**Chapter 17: Kimball Lifecycle Overview**](#chapter17)
 	1. [Roadmap](#roadmap)
 	2. [Lifecycle Launch Activities](#launch)
 	3. [Lifecycle Technology Track](#tech_track)
 	4. [Lifecycle Data Track](#data_track)
 	5. [Lifecycle BI Application Track](#bi_track)
 	6. [Lifecycle Wrap-up Activities](#maintain)
-18. Chapter 18: Dimensional Modeling Process and Tasks
-19. Chapter 19: ETL Subsystems and Techniques
+18. [**Chapter 18: Dimensional Modeling Process and Tasks**](#chapter18)
+	1. [Modeling Process Overview](#overview)
+	2. [Get Organized](#organize)
+	3. [Design the Dimensional Model](#design_dim_model)
+19. [**Chapter 19: ETL Subsystems and Techniques**](#chapter19)
 20. Chapter 20: ETL System Design and development Process and Task
 21. Chapter 21: Big Data Analytics
 
+
+
 ---
+
+
 
 ## Chapter 1: Data Warehousing Business Intelligence and Dimensional Modeling Prier <a name="chapter1"></a>
 
@@ -141,9 +148,13 @@ GROUP BY
 **Hybrid Hub-and-Spoke and Kimball Architecture**
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-6.png">
 
+
+
 ---
 
-## Chapter 17: Kimball Lifecycle Overview <a name="lifecycle"></a>
+
+
+## Chapter 17: Kimball Lifecycle Overview <a name="chapter17"></a>
 ### Roadmap <a name="roadmap"></a>
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/17-1.png">
 
@@ -177,7 +188,7 @@ GROUP BY
 - Determine architecture implementation phases
 - Design and specify the subsystem
 - Create the architecture plan
-- Review and finalized the technical architecture
+- Review and finalized the technical architecture <br/>
 **Product Selection and Installation**
 - Understand the corporate purchasing process
 - Develop a product evaluating matrix
@@ -192,7 +203,7 @@ GROUP BY
 - Develop Naming and Database Standards
 - Develop Initial Index Plan
 - Design Aggregations, Includeing OLAP Database
-- Finalize Physical Storage Detail
+- Finalize Physical Storage Detail <br/>
 **ETL Design and Development**
 
 
@@ -203,6 +214,75 @@ GROUP BY
 ### Lifecycle Wrap-up Activities <a name="maintain"></a>
 - Deployment
 - Maintenance and Growth (Support, Education, Technical support, Program support)
+
+
+---
+
+
+## Chapter 18: Dimensional Modeling Process and Tasks <a name="chapter18"></a>
+
+### Modeling Process Overview <a name="overview"></a>
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-1.png">
+- Ceating a dimensional model is a highly iterative and dynamic process
+- Complete high-level model
+- Dive into the dimensional table with attribute definition, domain values, sources, relationships, data quality concerns, and transformations
+- Model fact table
+- Review and Validate with interested parties
+- A typical design requires 3-4 weeks, but depends on team experience
+> Goal: Create model that meets business requirement, verify data is available, and provide ETL team with a solid starting source-to-target mapping
+
+### Get Organized <a name="organize"></a>
+- Identify participants, especially business representatives
+- Review the business Requirements
+- Leverage a modeling tool
+	- Spreadsheet as the initial documentation tool (easy to make changes)
+	- Modeling tools to create dimensional models
+- Leverage a data profiling tool
+	- Verify data exist in a usable state
+	- Manage data flaws
+	- Understand how to convert it into dimensional model
+	- Data profiling can be as simple as SQL statement, or as sophisticated as a special purpose tool
+- Leverage/Establish naming convensions
+	- The data labels must be descriptive and consistent from a business perspective
+- Coordinate calendars and facilities
+	- Several hours each day rather than the full day
+
+### Design the Dimensional Model <a name="design_dim_model"></a>
+**Design a dimensional model**
+- identify business process
+- declare the grain of the business process
+- identify the dimensions
+- identify the facts  <br/>
+**Modeling work sequence**
+- High-level model defining the model's scope and granularity
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-2.png">
+- Detailed design with table-by-table attributes and metrics
+	- Identify dimensions and metrics
+	- Identify the facts
+	- Identify slowly changing dimension techniques 
+		- Define how source data change be reflected in dimensional table
+		- Figure out if a data element change is due to a source data correction
+	- Document the detailed table designs
+	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-3.png">
+	- Track model issues in an issue log
+	- Maintain updated bus matrix
+- Review and validate with IT and business representatives
+	- IT review: bus matrix, dimension and fact details
+	- Core user review (Business user with IT knowledge): similar to IT review
+	- Broader business user review
+	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-4.png">
+- Finalization of the design documentation
+	- Brief description of the project
+	- High-level data model diagram
+	- Detailed dimensional design worksheet for each fact and dimensional table
+	- Open issues
+---
+
+
+## Chapter 19: ETL Subsystems and Techniques <a name="chapter19"></a>
+
+
+
 
 
 
