@@ -271,9 +271,9 @@ GROUP BY
 	- Identify slowly changing dimension techniques 
 		- Define how source data change be reflected in dimensional table
 		- Figure out if a data element change is due to a source data correction
-	- Document the detailed table designs
-
+	- Document the detailed table designs <br/>
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-3.png">
+
 	- Track model issues in an issue log
 	- Maintain updated bus matrix
 - Review and validate with IT and business representatives
