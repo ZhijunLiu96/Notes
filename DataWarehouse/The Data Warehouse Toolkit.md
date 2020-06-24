@@ -189,6 +189,7 @@ GROUP BY
 - Design and specify the subsystem
 - Create the architecture plan
 - Review and finalized the technical architecture <br/>
+
 **Product Selection and Installation**
 - Understand the corporate purchasing process
 - Develop a product evaluating matrix
@@ -199,11 +200,13 @@ GROUP BY
 
 ### Lifecycle Data Track <a name="data_track"></a>
 **Dimensional Modeling** <br/>
+
 **Physical Design** <br/>
 - Develop Naming and Database Standards
 - Develop Initial Index Plan
 - Design Aggregations, Includeing OLAP Database
 - Finalize Physical Storage Detail <br/>
+
 **ETL Design and Development**
 
 
@@ -222,7 +225,9 @@ GROUP BY
 ## Chapter 18: Dimensional Modeling Process and Tasks <a name="chapter18"></a>
 
 ### Modeling Process Overview <a name="overview"></a>
+
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-1.png">
+
 - Ceating a dimensional model is a highly iterative and dynamic process
 - Complete high-level model
 - Dive into the dimensional table with attribute definition, domain values, sources, relationships, data quality concerns, and transformations
@@ -248,14 +253,18 @@ GROUP BY
 	- Several hours each day rather than the full day
 
 ### Design the Dimensional Model <a name="design_dim_model"></a>
+
 **Design a dimensional model**
 - identify business process
 - declare the grain of the business process
 - identify the dimensions
 - identify the facts  <br/>
+
 **Modeling work sequence**
 - High-level model defining the model's scope and granularity
+
 <img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-2.png">
+
 - Detailed design with table-by-table attributes and metrics
 	- Identify dimensions and metrics
 	- Identify the facts
@@ -263,14 +272,17 @@ GROUP BY
 		- Define how source data change be reflected in dimensional table
 		- Figure out if a data element change is due to a source data correction
 	- Document the detailed table designs
-	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-3.png">
+
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-3.png">
 	- Track model issues in an issue log
 	- Maintain updated bus matrix
 - Review and validate with IT and business representatives
 	- IT review: bus matrix, dimension and fact details
 	- Core user review (Business user with IT knowledge): similar to IT review
 	- Broader business user review
-	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-4.png">
+
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-4.png">
+
 - Finalization of the design documentation
 	- Brief description of the project
 	- High-level data model diagram
