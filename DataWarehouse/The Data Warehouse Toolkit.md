@@ -26,6 +26,12 @@
 15. Chapter 15: Electronic Commerce
 16. Chapter 16: Insurance
 17. [**Chapter 17: Kimball Lifecycle Overview**](#lifecycle)
+	1. [Roadmap](#roadmap)
+	2. [Lifecycle Launch Activities](#launch)
+	3. [Lifecycle Technology Track](#tech_track)
+	4. [Lifecycle Data Track](#data_track)
+	5. [Lifecycle BI Application Track](#bi_track)
+	6. [Lifecycle Wrap-up Activities](#maintain)
 18. Chapter 18: Dimensional Modeling Process and Tasks
 19. Chapter 19: ETL Subsystems and Techniques
 20. Chapter 20: ETL System Design and development Process and Task
@@ -138,3 +144,65 @@ GROUP BY
 ---
 
 ## Chapter 17: Kimball Lifecycle Overview <a name="lifecycle"></a>
+### Roadmap <a name="roadmap"></a>
+<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/17-1.png">
+
+### Lifecycle Launch Activities <a name="launch"></a>
+
+**Program/Project Planing and Management**
+- Assessing Readiness
+	- Have a strong executive business sponsor
+	- Have a strong and compelling business motivition for tackling the DW/BI initiative
+	- Assess feasibility (e.g. technical and resource feasibility, especially data feasibility - no short-term fix)
+- Scoping and Justification
+- Staffing
+	- (Busiess) Business sponsor, Business driver, Business lead, Business users
+	- (IT/Business) Business analyst, Data steward, BI application developer/designer
+	- (IT) Project manager, Technical architect, Data architect/modeler, Database administrator, Metadata coordinator, ETL architect/designer, ETL developer
+- Developing and Maintaining the Plan
+- Business Requirements Definition
+	- Requirements Preplanning
+	- Collecting Business Requirements
+	- Conducting Data-cCentric Interviews (acertain core data exist)
+	- Documenting Requirement
+	- Prioritizing Requirements (projects in the upper-left cell are meaningful opportunities)
+	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/17-2.png">
+
+### Lifecycle Technology Track <a name="tech_track"></a>
+**Technology Architecture Design**
+- Estabilish an architecture task force of 2 or 3 people
+- Collect architect-related requirements
+- Document architect requiremnets
+- Create the architecture model
+- Determine architecture implementation phases
+- Design and specify the subsystem
+- Create the architecture plan
+- Review and finalized the technical architecture
+**Product Selection and Installation**
+- Understand the corporate purchasing process
+- Develop a product evaluating matrix
+- Conduct market research
+- Evaluate a short list of options
+- (if necessary) Conduct a prototype
+- Select product, install on trail, and negotiatie
+
+### Lifecycle Data Track <a name="data_track"></a>
+**Dimensional Modeling** <br/>
+**Physical Design** <br/>
+- Develop Naming and Database Standards
+- Develop Initial Index Plan
+- Design Aggregations, Includeing OLAP Database
+- Finalize Physical Storage Detail
+**ETL Design and Development**
+
+
+### Lifecycle BI Application Track <a name="bi_track"></a>
+- BI Application Specification
+- BI Application Development
+
+### Lifecycle Wrap-up Activities <a name="maintain"></a>
+- Deployment
+- Maintenance and Growth (Support, Education, Technical support, Program support)
+
+
+
