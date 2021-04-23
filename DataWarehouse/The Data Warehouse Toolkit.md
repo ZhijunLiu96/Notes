@@ -24,7 +24,7 @@
 13. Chapter 13: Education
 14. Chapter 14: Healthcare
 15. Chapter 15: Electronic Commerce
-16. Chapter 16: Insurance
+16. [**Chapter 16: Insurance**](#chapter16)
 17. [**Chapter 17: Kimball Lifecycle Overview**](#chapter17)
 	1. [Roadmap](#roadmap)
 	2. [Lifecycle Launch Activities](#launch)
@@ -81,7 +81,7 @@
 - Dimention table: "who, what, where, whhen, how, why" (usually no more than 50 attributes)
 - Fact table: measurements
 - Dimensions provide the entry points to the data, and the final labels and groupings on all DW/BI analysis
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-1.png">
+<img src="figure/1-1.png">
 
 ```sql
 SELECT
@@ -108,10 +108,10 @@ GROUP BY
 - Data is stored and indexed using format and techniques that are designed for dimensional data
 - Create performance aggregations or precalculated summary tables
 - Cubes deliver suoerior query performance (b/c precalculations, indexing strategies)
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-2.png">
+<img src="figure/1-2.png">
 
 ### Kimball's DW/BI Architecture <a name="kimball"></a>
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-3.png">
+<img src="figure/1-3.png">
 
 **ETL**
 - Understand the source data
@@ -133,7 +133,7 @@ GROUP BY
 ### Alternative DW/BI Architectures <a name="alternative"></a>
 
 **Independent Data Mart Architecture**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-4.png">
+<img src="figure/1-4.png">
 - A database satisfies department's analytic requirements
 - Other department don't have access
 - Prevalent in large organizations
@@ -141,22 +141,23 @@ GROUP BY
 > (Difference) Dimensional Modeling: atomic details, built by business process
 
 **Hub-and-Spoke Corporate Information Factory Inmon Architecture (CIF)**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-5.png">
+<img src="figure/1-5.png">
 - Normalized EDW (Enterprise Data Warehouse)
 - Advocate enterprise data coordination and integration
 
 **Hybrid Hub-and-Spoke and Kimball Architecture**
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/1-6.png">
+<img src="figure/1-6.png">
 
 
 
 ---
 
+## Chater 16: Insurance <a name="chapter16"></a>
 
 
 ## Chapter 17: Kimball Lifecycle Overview <a name="chapter17"></a>
 ### Roadmap <a name="roadmap"></a>
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/17-1.png">
+<img src="figure/17-1.png">
 
 ### Lifecycle Launch Activities <a name="launch"></a>
 
@@ -177,7 +178,7 @@ GROUP BY
 	- Conducting Data-cCentric Interviews (acertain core data exist)
 	- Documenting Requirement
 	- Prioritizing Requirements (projects in the upper-left cell are meaningful opportunities)
-	<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/17-2.png">
+	<img src="figure/17-2.png">
 
 ### Lifecycle Technology Track <a name="tech_track"></a>
 **Technology Architecture Design**
@@ -226,7 +227,7 @@ GROUP BY
 
 ### Modeling Process Overview <a name="overview"></a>
 
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-1.png">
+<img src="figure/18-1.png">
 
 - Ceating a dimensional model is a highly iterative and dynamic process
 - Complete high-level model
@@ -263,7 +264,7 @@ GROUP BY
 **Modeling work sequence**
 - High-level model defining the model's scope and granularity
 
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-2.png">
+<img src="figure/18-2.png">
 
 - Detailed design with table-by-table attributes and metrics
 	- Identify dimensions and metrics
@@ -275,14 +276,14 @@ GROUP BY
 	- Track model issues in an issue log
 	- Maintain updated bus matrix
 	
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-3.png">
+<img src="figure/18-3.png">
 
 - Review and validate with IT and business representatives
 	- IT review: bus matrix, dimension and fact details
 	- Core user review (Business user with IT knowledge): similar to IT review
 	- Broader business user review
 
-<img src="https://github.com/ZhijunLiu96/Notes/blob/master/DataWarehouse/figure/18-4.png">
+<img src="figure/18-4.png">
 
 - Finalization of the design documentation
 	- Brief description of the project
@@ -294,8 +295,53 @@ GROUP BY
 
 ## Chapter 19: ETL Subsystems and Techniques <a name="chapter19"></a>
 
+- Three Letter
+	- E: get the data out of the original source location
+	- T: do something to it
+	- L: load it to a final set of tables for business users to query
+
+### Round up the requirments
+- **Business needs**
+- **Compliance**: set some compliance restrictions to prove what they reported
+- **Data Quality**: list the data elements whose quality is known to unacceptable, and list whether an agreement has been reached to correct the data before extraction. List all those in data profiling process.
+- **Security**: data should be restricted to those who need to know(include physical backups)
+- **Data Integration**: confirm dimensions & facts (metrics)
+- **Data Latency**: how quickly the data can be delivered to business users
+- **Archiving and Lineage**: stage the data after each major step of the ETL pipeline
+- **BI delivery Interfaces**: List all facts, dimension tables, OLAP cubes and special database structures
+- **Available Skills**: base on the skills that people can reach out
+- **Legacy Licenses**
+
+
+### The 34 Subsystems of ETL
+- Extract
+- Data cleaning and conforming
+- Delivery
+- Manage
+
+### Extracting: getting data into the Data Warehouse
+- Subsystem 1: Data Profiling
+	- Before and during the ETL process
+	- Squeeze out problems
+- Subsystem 2: Change data Capture System
+	- Isolating the latest source data is called **CDC**(change data capture).
+	- Only update the data that has changes
+	- Tag changed data with reason (update/correction)
+	- Support complaince tracking with additional metadata
+	- Tools: audit column, time extracts, full diff compare, database log scraping, message queue monitering 
+- Subsystem 3: Extract System
+	- Method to get data: file or stream
+	- 
+
+### Cleaning and Conforming Data
+- Improving Data Quality Culture and Processes
+- Subsystem 4: Data Cleaning System
+- 
 
 
 
 
 
+
+
+## Chapter 20:
