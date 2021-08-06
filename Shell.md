@@ -126,8 +126,8 @@ chmod 770 filename
 ### 查找
 - 查找 ```/keyword``` 用n和N进行前后遍历，```:set ic``` ignore case,```:set noic``` cancel case ignore, ```:set hls is``` highlight, ```:nohlsearch``` remove highlight, ```/ignore\c```仅一次查找中忽略大小写
 - % 可以查找配对的括号 )、]、}
-- :s/thee/the <回车> 。请注意该命令只改变光标所在行的第一个匹配串。
-- :s/thee/the/g 则是替换全行的匹配串
+- ```:s/thee/the <回车> ```。请注意该命令只改变光标所在行的第一个匹配串。
+- ```:s/thee/the/g``` 则是替换全行的匹配串
 - 在两行内替换所有的字符串 old 为新的字符串 new，请输入  :#,#s/old/new/g
 - 在文件内替换所有的字符串 old 为新的字符串 new，请输入  :%s/old/new/g
 - 进行全文替换时询问用户确认每个替换需添加 c 标志        :%s/old/new/gc

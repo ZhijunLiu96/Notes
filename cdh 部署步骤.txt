@@ -1,0 +1,174 @@
+cdh 部署步骤
+
+IPADDR=172.16.223.11 
+NETMASK=255.255.255.0
+GATEWAY=172.16.223.1
+DNS1=8.8.8.8
+DNS2=114.114.114.114
+
+
+systemctl restart network
+
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+
+
+
+
+1.安装vim编辑器 
+yum install -y vim
+2.安装lrzsz文件传输工具 
+yum -y install lrzsz 
+3.安装wget文件下载工具 
+yum -y install wget
+4.安装netstat，查看端口监听状况：
+yum -y install net-tools 
+5.下载unzip解压工具，解压命令：
+yum install -y unzip zip
+
+
+
+===关闭防火墙====
+systemctl stop firewalld 
+systemctl disable firewalld
+
+
+====配置节点======
+1、网络配置(所有节点)
+1．设置主机名和IP
+
+2．配置/etc/hosts  IP和主机名的映射  
+
+
+=====SSH=====
+1．产生公钥和私钥：
+ssh-keygen -t rsa （一直回车直即可）
+
+2．将公钥分发给所有节点（包括本机)：  
+ssh-copy-id -i 主机名
+
+3．测试ssh访问:    
+ssh root@主机名
+
+chmod 600 ~/.ssh/id_rsa
+
+
+====关闭SELINUX=====
+1．编辑  sudo vi /etc/selinux/config
+
+2．将SELINUX设置为：SELINUX=disabled
+
+[root@node11~]# sestatus -v
+
+SELinux status: disabled 表示已经关闭了
+有时需要重启
+
+====设置时间====
+timedatectl set-timezone Asia/Shanghai
+
+
+=====设置NTP=====
+
+====master====
+yum -y install chrony
+cp /etc/chrony.conf /etc/chrony.conf.bak
+sudo vi /etc/chrony.conf
+
+chronyc sources –v
+说明：
+^* #已同步
+^? #未同步
+开启自启
+systemctl status chronyd
+systemctl start chronyd
+systemctl enable chronyd 
+==== node =====
+yum -y install chrony
+sudo ntpdate master
+crontab -e
+0-59/1 * * * * /usr/sbin/ntpdate master
+
+
+========安装软件========
+sudo yum install openssh-clients
+
+--java--
+scp /Users/zhijunliu/personal/mirror/jdk-8u301-linux-x64.rpm admin@172.16.223.10:/home/admin/Software
+
+sudo mkdir /usr/java
+sudo mv Software/jdk-8u301-linux-x64.rpm /usr/java/
+cd /usr/java
+sudo rpm -ivh  jdk-8u301-linux-x64.rpm
+sudo vi /etc/profile
+export JAVA_HOME=/usr/java/jdk1.8.0_301
+
+export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/sbin
+
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+
+source /etc/profile
+java -version
+
+
+--scala--
+
+scp /Users/zhijunliu/personal/mirror/scala-2.11.6.rpm admin@172.16.223.10:/home/admin/Software
+
+sudo mkdir /usr/scala
+sudo mv Software/scala-2.11.6.rpm /usr/scala/
+cd /usr/scala
+sudo rpm -ivh scala-2.11.6.rpm
+sudo vi /etc/profile
+
+SCALA_HOME=/usr/scala/scala-2.11.6
+SCALA_PATH=$PATH:$SCALA_HOME/bin
+export SCALA_HOME SCALA_PATH
+
+source /etc/profile
+scala -version
+
+
+
+=======修改系统设置==========
+sudo su
+
+cat /proc/sys/vm/swappiness
+echo "10" > /proc/sys/vm/swappiness
+
+cat /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+vi /etc/security/limits.conf
+# End of file
+* soft nofile 1000000
+* hard nofile 1000000
+
+vi /etc/security/limits.d/20-nproc.conf
+*          soft    nproc     409600
+root       soft    nproc     unlimited
+
+echo "vm.swappiness = 0" >> /etc/sysctl.conf
+
+exit
+
+=======创建hadoop用户并赋权sudo和免密登录======
+
+sudo su
+groupadd hadoop
+useradd hadoop -m -g hadoop
+passwd hadoop
+
+visudo
+hadoop ALL=(ALL) NOPASSWD:ALL
+
+ssh-keygen -t rsa
+ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@master
+
+
+以后还是装在admin用户下，不能用hadoop账户，权限太高
+
+
+
+
