@@ -1,6 +1,9 @@
 cdh 部署步骤
 
-IPADDR=172.16.223.11 
+
+sudo vim /etc/sysconfig/network-scripts/ifcfg-ens33 
+
+IPADDR=172.16.223.10
 NETMASK=255.255.255.0
 GATEWAY=172.16.223.1
 DNS1=8.8.8.8
@@ -16,14 +19,16 @@ systemctl disable NetworkManager
 
 
 1.安装vim编辑器 
-yum install -y vim
 2.安装lrzsz文件传输工具 
-yum -y install lrzsz 
 3.安装wget文件下载工具 
-yum -y install wget
 4.安装netstat，查看端口监听状况：
-yum -y install net-tools 
 5.下载unzip解压工具，解压命令：
+sudo su
+
+yum install -y vim
+yum -y install lrzsz 
+yum -y install wget
+yum -y install net-tools 
 yum install -y unzip zip
 
 
@@ -37,7 +42,10 @@ systemctl disable firewalld
 1、网络配置(所有节点)
 1．设置主机名和IP
 
-2．配置/etc/hosts  IP和主机名的映射  
+2．配置sudo vim /etc/hosts  IP和主机名的映射  
+172.16.223.10 master
+172.16.223.11 node1
+172.16.223.12 node2
 
 
 =====SSH=====
@@ -70,9 +78,11 @@ timedatectl set-timezone Asia/Shanghai
 =====设置NTP=====
 
 ====master====
-yum -y install chrony
-cp /etc/chrony.conf /etc/chrony.conf.bak
+sudo yum -y install chrony
+sudo cp /etc/chrony.conf /etc/chrony.conf.bak
 sudo vi /etc/chrony.conf
+
+systemctl restart ntpd
 
 chronyc sources –v
 说明：
@@ -83,7 +93,7 @@ systemctl status chronyd
 systemctl start chronyd
 systemctl enable chronyd 
 ==== node =====
-yum -y install chrony
+sudo yum -y install chrony
 sudo ntpdate master
 crontab -e
 0-59/1 * * * * /usr/sbin/ntpdate master
@@ -93,10 +103,10 @@ crontab -e
 sudo yum install openssh-clients
 
 --java--
-scp /Users/zhijunliu/personal/mirror/jdk-8u301-linux-x64.rpm admin@172.16.223.10:/home/admin/Software
+scp /Users/zhijunliu/personal/mirror/jdk-8u301-linux-x64.rpm admin@172.16.223.10:/home/admin/Downloads
 
 sudo mkdir /usr/java
-sudo mv Software/jdk-8u301-linux-x64.rpm /usr/java/
+sudo mv Downloads/jdk-8u301-linux-x64.rpm /usr/java/
 cd /usr/java
 sudo rpm -ivh  jdk-8u301-linux-x64.rpm
 sudo vi /etc/profile
@@ -113,10 +123,10 @@ java -version
 
 --scala--
 
-scp /Users/zhijunliu/personal/mirror/scala-2.11.6.rpm admin@172.16.223.10:/home/admin/Software
+scp /Users/zhijunliu/personal/mirror/scala-2.11.6.rpm admin@172.16.223.12:/home/admin/Downloads
 
 sudo mkdir /usr/scala
-sudo mv Software/scala-2.11.6.rpm /usr/scala/
+sudo mv /home/admin/Downloads/scala-2.11.6.rpm /usr/scala/
 cd /usr/scala
 sudo rpm -ivh scala-2.11.6.rpm
 sudo vi /etc/profile
@@ -169,6 +179,256 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@master
 
 以后还是装在admin用户下，不能用hadoop账户，权限太高
 
+======== mysql ===========
+主节点安装即可
+
+删除mariadb相关库
+rpm -qa | grep maria
+rpm -e mariadb-libs-5.5.56-2.el7.x86_64 –nodeps
+
+yum remove mariadb-libs-5.5.56-2.el7.x86_64
+
+sudo yum -y install perl.x86_64
+
+sudo yum -y install net-tools.x86_64
+
+
+scp /Users/zhijunliu/personal/mirror/mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar admin@172.16.223.12:/home/admin/Downloads
+
+sudo su
+mkdir /usr/mysql
+mv /home/admin/Downloads/mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar /usr/mysql/
+cd /usr/mysql
+tar -xvf mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar
+
+rpm -ivh mysql-community-common-5.7.29-1.el7.x86_64.rpm
+rpm -ivh mysql-community-libs-5.7.29-1.el7.x86_64.rpm
+rpm -ivh mysql-community-libs-compat-5.7.29-1.el7.x86_64.rpm
+rpm -ivh mysql-community-client-5.7.29-1.el7.x86_64.rpm
+rpm -ivh mysql-community-server-5.7.29-1.el7.x86_64.rpm
+
+vi /etc/my.cnf
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+symbolic-links=0
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+# 以下是新增设置-编码设置
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+
+# 以下为cloudera 推荐设置
+transaction-isolation = READ-COMMITTED
+key_buffer_size = 32M
+max_allowed_packet = 16M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+max_connections = 550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+log_bin=/var/lib/mysql/mysql_binary_log
+server_id=1
+binlog_format = mixed
+read_buffer_size = 2M
+read_rnd_buffer_size = 16M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+sql_mode=STRICT_ALL_TABLES
+# 以上是 cloudera 推荐设置
+
+# 编码设置
+[client]
+default-character-set = utf8mb4
+[mysql]
+default-character-set = utf8mb4
+
+
+systemctl start mysqld
+grep 'temporary password' /var/log/mysqld.log
+
+mysql -u root -p
+9q%AHBef,>4y
+
+
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('12345678');
+mysql> set global validate_password_policy=LOW;     //只需要8位
+## mysql> set global validate_password_policy=0;       //只验证长度
+mysql> quit;
+
+运行mysql初始化设置脚本（根据提示删除匿名用户和测试库，并允许远程登录）
+/usr/bin/mysql_secure_installation
+
+mysql -u root -p
+mysql> select HOST,USER,Grant_priv,Super_priv from mysql.`user`;
+mysql> update mysql.user set Grant_priv='Y',Super_priv='Y',host = '%' where user = 'root';
+mysql> flush privileges;
+
+登录验证编码
+SHOW VARIABLES like '%char%';
+
+character_set_client	 utf8mb4
+character_set_connection	utf8mb4
+character_set_database	utf8mb4
+character_set_filesystem	binary
+character_set_results	utf8mb4
+character_set_server	utf8mb4
+character_set_system	utf8
+character_sets_dir	/usr/share/mysql/charsets/
+validate_password_special_char_count	1
+
+
+systemctl enable mysqld
+
+
+======所有节点 mysql jdbc=====
+
+sudo su 
+mkdir /usr/mysql
+cd /usr/mysql
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.32.tar.gz
+
+
+tar  -zxvf  mysql-connector-java-5.1.32.tar.gz
+mkdir -p /usr/share/java/
+cp mysql-connector-java-5.1.32/mysql-connector-java-5.1.32-bin.jar /usr/share/java/mysql-connector-java.jar #这需要改名(必须)
+
+
+cd /usr/share/java/
+chmod 777 mysql-connector-java.jar
 
 
 
+========搭建本地 yum 源  master==========
+sudo yum install httpd -y
+sudo systemctl  start httpd
+sudo systemctl enable httpd
+
+
+========upload CM=========
+scp /Users/zhijunliu/personal/mirror/cm6.2.1/cm6.2.1-redhat7.tar.gz  admin@172.16.223.10:/home/admin/c
+
+scp /Users/zhijunliu/personal/mirror/cdh6.2.1/CDH-6.2.1-1.cdh6.2.1.p0.1425774-el7.parcel admin@172.16.223.10:/home/admin/Downloads
+
+========= install cm ==========
+sudo su
+
+mkdir -p /var/www/html/cloudera-repos/cm6
+tar xvfz cm6.2.1-redhat7.tar.gz -C /var/www/html/cloudera-repos/cm6 --strip-components=1
+http://localhost/cloudera-repos/cm6
+# sudo vim /etc/yum.repos.d/cloudera-repo.repo 
+[cloudera-repo] 
+name=cloudera-repo 
+baseurl=http://172.16.223.10/cloudera-repos/cm6 
+enabled=1 
+gpgcheck=0 
+
+
+sudo yum install /lib/lsb/init-functions mod_ssl openssl-devel python-psycopg2 MySQL-python postgresql-libs.x86_64
+
+cd /var/www/html/cloudera-repos/cm6/RPMS/x86_64
+
+master
+sudo rpm -ivh cloudera-manager-daemons-6.2.1-1426065.el7.x86_64.rpm
+sudo rpm -ivh cloudera-manager-agent-6.2.1-1426065.el7.x86_64.rpm
+sudo rpm -ivh cloudera-manager-server-6.2.1-1426065.el7.x86_64.rpm
+
+node 
+sudo rpm -ivh cloudera-manager-daemons-6.2.1-1426065.el7.x86_64.rpm
+sudo rpm -ivh cloudera-manager-agent-6.2.1-1426065.el7.x86_64.rpm
+
+sudo vim /etc/cloudera-scm-agent/config.ini （hadoop用户-所有节点）
+server_host=master（cloudera-scm-server节点名称）
+# 7182
+
+===================configure database============================
+
+
+GRANT ALL ON scm.* TO 'scm'@'%' IDENTIFIED BY '12345678';
+
+GRANT ALL ON scm.* TO 'scm'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON amon.* TO 'amon'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON rman.* TO 'rman'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON hue.* TO 'hue'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON metastore.* TO 'hive'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON sentry.* TO 'sentry'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE nav DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON nav.* TO 'nav'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE navms DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON navms.* TO 'navms'@'%' IDENTIFIED BY '12345678';
+CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON oozie.* TO 'oozie'@'%' IDENTIFIED BY '12345678';
+检查是否创建完成
+SHOW DATABASES;
+
+DROP DATABASE scm;
+
+sudo /opt/cloudera/cm/schema/scm_prepare_database.sh mysql -h master -P3306 -uroot -p12345678 --scm-host master scm scm 12345678
+
+========下载 CDH 离线包==========
+
+sudo su
+mkdir -p /opt/cloudera/parcel-repo
+sudo mv CDH-6.2.1-1.cdh6.2.1.p0.1425774-el7.parcel /opt/cloudera/parcel-repo/
+
+cd /opt/cloudera/parcel-repo
+
+sha1sum CDH-6.2.1-1.cdh6.2.1.p0.1425774-el7.parcel | awk '{ print $1 }' > CDH-6.2.1-1.cdh6.2.1.p0.1425774-el7.parcel.sha
+
+exit
+cd /opt/cloudera/parcel-repo
+
+sudo chown -R cloudera-scm:cloudera-scm /opt/cloudera/parcel-repo/*
+
+
+
+========= 启动 CM 服务 ===============
+# systemctl start cloudera-scm-server
+# 开机自启
+sudo systemctl enable cloudera-scm-server（server节点）
+sudo systemctl start cloudera-scm-agent
+sudo systemctl enable cloudera-scm-agent（所有agent节点）
+监控server 的运行日志
+sudo tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
+
+
+http://172.16.223.10:7180/cmf/login
+
+
+http://172.16.223.10/cloudera-repos/cm6 
+
+
+sudo systemctl restart cloudera-scm-agent
+sudo systemctl restart cloudera-scm-server
+
+
+sudo tail -f /var/log/cloudera-scm-agent/cloudera-scm-agent.log
+
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+GRANT ALL ON metastore.* TO 'hive'@'%' IDENTIFIED BY '12345678';
+
+jdbc:mysql://172.16.223.10:3306/metastore?createDatabaseIfNotExist=true
