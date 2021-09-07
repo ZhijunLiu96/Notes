@@ -81,3 +81,8 @@
 - ```git pull origin master``` == ```git fetch origin master; git merge o/master```
 - ```git pull origin master:foo``` == ```git fetch origin master:foo; git merge foo```
 
+---
+ 
+**删除当前缓存重新添加：**
+
+```git rm -r --cached .```

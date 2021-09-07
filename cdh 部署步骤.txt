@@ -94,7 +94,10 @@ systemctl start chronyd
 systemctl enable chronyd 
 ==== node =====
 sudo yum -y install chrony
-sudo ntpdate master
+
+
+sudo vi /etc/ntp.conf
+sudo ntpdate -u master
 crontab -e
 0-59/1 * * * * /usr/sbin/ntpdate master
 
